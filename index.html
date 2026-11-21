@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GIGASHARE — Sube y comparte archivos</title>
+<meta name="description" content="Sube cualquier archivo y comparte un enlace de descarga.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232563eb'/><path d='M16 23V10m-5 5 5-5 5 5' stroke='%23fff' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#/">
+    <span class="logo">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 24V9m-6 6 6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="brand-name">GIGA<em>SHARE</em></span>
+  </a>
+
+  <nav class="nav">
+    <a href="#subir">Subir</a>
+    <a href="#archivos">Mis archivos</a>
+    <a href="#planes">Planes</a>
+  </nav>
+
+  <button class="plan-chip" id="planChip" type="button">
+    <span class="dot"></span> Plan Gratis · 1 TB
+  </button>
+</header>
+
+<main>
+
+<!-- ============ INICIO ============ -->
+<section class="home" id="home">
+  <div class="hero">
+    <span class="badge">Demo · almacenamiento en la nube</span>
+    <h1>Sube cualquier archivo<br>y comparte un enlace</h1>
+    <p>Fotos, vídeos, música, ZIP, ISO o lo que sea. Subes, copias el enlace y se lo mandas a quien quieras: esa persona abre el enlace y descarga.</p>
+  </div>
+
+  <div class="quota" id="quotaBox">
+    <div class="quota-top">
+      <span><strong id="quotaUsed">0 B</strong> usados de <strong id="quotaTotal">1 TB</strong></span>
+      <span class="quota-pct" id="quotaPct">0 %</span>
+    </div>
+    <div class="quota-bar"><span id="quotaFill"></span></div>
+    <div class="quota-note">El cupo de los planes es parte de la demo.</div>
+  </div>
+
+  <div class="drop" id="subir" tabindex="0" role="button" aria-label="Seleccionar archivos">
+    <input type="file" id="fileInput" multiple hidden>
+    <div class="drop-icon">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 34V14m-8 8 8-8 8 8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 32v4a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4v-4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </div>
+    <div class="drop-title">Arrastra tus archivos aquí<span> o haz clic para elegirlos</span></div>
+    <div class="drop-sub">Cualquier tipo de archivo · varios a la vez · hasta 1 TB por archivo</div>
+    <button class="btn primary" id="pickBtn" type="button">Elegir archivos</button>
+  </div>
+
+  <div class="queue" id="queue"></div>
+  <div class="results" id="results"></div>
+
+  <!-- MIS ARCHIVOS -->
+  <section class="block" id="archivos">
+    <div class="block-head">
+      <h2>Mis archivos</h2>
+      <button class="btn ghost small" id="clearAll" type="button">Vaciar lista</button>
+    </div>
+    <div class="filelist" id="fileList"></div>
+  </section>
+
+  <!-- PLANES -->
+  <section class="block" id="planes">
+    <div class="block-head">
+      <h2>Planes</h2>
+      <span class="muted">Precios de muestra, sin cobros reales.</span>
+    </div>
+    <div class="plans">
+      <article class="plan">
+        <h3>Gratis</h3>
+        <div class="price">0 <small>USD</small></div>
+        <div class="plan-cap">1 TB de espacio</div>
+        <ul>
+          <li>Archivos de cualquier tipo</li>
+          <li>Enlaces de descarga ilimitados</li>
+          <li>Subidas de hasta varios GB</li>
+          <li>Sin caducidad mientras se descargue</li>
+        </ul>
+        <button class="btn line" type="button" data-plan="free">Plan actual</button>
+      </article>
+
+      <article class="plan featured">
+        <span class="tag">Popular</span>
+        <h3>Pro</h3>
+        <div class="price">5 <small>USD / mes</small></div>
+        <div class="plan-cap">5 TB de espacio</div>
+        <ul>
+          <li>Todo lo del plan Gratis</li>
+          <li>5 veces más espacio</li>
+          <li>Archivos más grandes</li>
+          <li>Enlaces sin marca</li>
+        </ul>
+        <button class="btn primary" type="button" data-plan="pro">Pasar a Pro</button>
+      </article>
+    </div>
+  </section>
+</section>
+
+<!-- ============ PÁGINA DE UN ARCHIVO ============ -->
+<section class="viewer hidden" id="viewer">
+  <div class="viewer-card" id="viewerCard"></div>
+  <p class="viewer-note">El archivo lo entrega un servicio externo de alojamiento gratuito. Al pulsar en descargar se abre su página de descarga.</p>
+  <a class="back" href="#/">← Volver a GIGASHARE</a>
+</section>
+
+</main>
+
+<footer class="footer">
+  <span>GIGASHARE · demo de almacenamiento y enlaces compartidos</span>
+  <span>Los archivos se alojan temporalmente en un servicio público gratuito.</span>
+</footer>
+
+<div class="modal hidden" id="modal">
+  <div class="modal-card">
+    <h3 id="modalTitle">Título</h3>
+    <p id="modalBody">Texto</p>
+    <div class="modal-actions"><button class="btn primary" id="modalOk" type="button">Entendido</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
